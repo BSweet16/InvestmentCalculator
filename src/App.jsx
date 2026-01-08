@@ -1,8 +1,19 @@
-import { Header } from "./components/header/header"
+import { Header } from "./components/Header/Header"
+import { ResultTable } from "./components/ResultTable/ResultTable"
+import { UserInput } from "./components/UserInput/UserInput"
 
 function App() {
   return (
-    <Header />
+    <>
+      {/* Header Section */}
+      <Header />
+
+      {/* Body Section */}
+      <UserInput />
+
+      {/* Result Table Section */}
+      <ResultTable  />
+    </>
   )
 }
 
