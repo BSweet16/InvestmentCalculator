@@ -7,14 +7,15 @@ import {
   DURATION_NAME,
   UserInput,
 } from "./components/UserInput/UserInput";
-import { formatter, calculateInvestmentResults } from "./util/investment.js";
-import React from "react";
+import { formatter } from "./util/investment.js";
+import { useState } from "react";
 
 function App() {
-  const [intialValue, setInitialValue] = React.useState();
-  const [annualValue, setAnnualValue] = React.useState();
-  const [expectedValue, setExpectedValue] = React.useState();
-  const [durationValue, setDurationValue] = React.useState();
+  const [intialValue, setInitialValue] = useState();
+  const [annualValue, setAnnualValue] = useState();
+  const [expectedValue, setExpectedValue] = useState();
+  const [durationValue, setDurationValue] = useState();
+
 
   /**
    * Static helper method to determine if all fields have been updated with a value
@@ -59,7 +60,7 @@ function App() {
    * The main OnChange event which calls the formatter function
    * and handles claculation of the final output.
    */
-  function calculateResultsOnChange(e) {
+  function updateInputsOnChange(e) {
     // Call formatter function and update the input display value
     const formattedValue = formatInputOnChange(e);
 
@@ -82,29 +83,24 @@ function App() {
         console.error('Unable to determine updated input field.');
         return;
     }
-
-    // Verify all fields are complete, before continuing with rest of function
-    const allFieldsCompleted = allFieldsCompleted();
-    if (!allFieldsCompleted) {
-      return;
-    }
-
-    // Calculate final output and update results table
-    calculateInvestmentResults(intialValue, annualValue, expectedValue, durationValue);
-    // @TODO - ...
   }
 
   return (
-    <>
-      {/* Header Section */}
-      <Header />
+      <>
+          {/* Header Section */}
+          <Header />
 
-      {/* Body Section */}
-      <UserInput onChangeListener={calculateResultsOnChange} />
+          {/* Body Section */}
+          <UserInput onChangeListener={updateInputsOnChange} />
 
-      {/* Result Table Section */}
-      <ResultTable />
-    </>
+          {/* Result Table Section */}
+          <ResultTable
+              intialValue={intialValue}
+              annualValue={annualValue}
+              expectedValue={expectedValue}
+              durationValue={durationValue}
+          />
+      </>
   );
 }
 
