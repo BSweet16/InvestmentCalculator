@@ -60,7 +60,7 @@ export function ResultTable({
         <div id="result">
             <table id="result-table" className="center">
                 <thead>
-                    <tr>
+                    <tr key={data.year}>
                         <th>Year</th>
                         <th>Investment Value</th>
                         <th>Interest (Year)</th>
