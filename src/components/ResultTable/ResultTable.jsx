@@ -8,30 +8,12 @@ export function ResultTable({
     expectedValue = 0,
     durationValue = 0,
 }) {
-    /**
-     * Create a table row with given cell values
-     * @returns JSX.Element containing an array of values for table cells in a row
-     */
-    function createTableRow([
-        cellValueOne,
-        cellValueTwo,
-        cellValueThree,
-        cellValueFour,
-        cellValueFive,
-    ]) {
-        return (
-            <tr>
-                <td>{cellValueOne}</td>
-                <td>{cellValueTwo}</td>
-                <td>{cellValueThree}</td>
-                <td>{cellValueFour}</td>
-                <td>{cellValueFive}</td>
-            </tr>
-        );
+    // Validate user input is valid before calculating all rows
+    if (durationValue <= 0){
+        return (<div><p className="center">Please enter a duration greater than 0.</p></div>)
     }
     
     // Calculate row values and build table
-    let runningInterestPaid = 0; // Maintian a counter of interest paid so far, to avoid having to recalculate per row
     const calculatedTableData =
         calculateInvestmentResults({
             initialInvestment: initialValue,
@@ -40,34 +22,31 @@ export function ResultTable({
             duration: durationValue,
         }) ?? EMPTY_TABLE_DATA;
     const tableRows = calculatedTableData.map((data) =>
-        {
-            // Format data for row
-            const yearCell = data.year;
-            const annualInvestmentCell = [...formatter.format(data.valueEndOfYear)];
-            const interestCell = [...formatter.format(data.interest)];
-            
+        {            
             // Calculate total interest earned
             const initialInvestment = calculatedTableData[0].valueEndOfYear - calculatedTableData[0].interest - calculatedTableData[0].annualInvestment;
-            const totalInterestCell = [...formatter.format(data.valueEndOfYear - data.annualInvestment * data.year - initialInvestment)];
+            const totalInterestCell = data.valueEndOfYear - data.annualInvestment * data.year - initialInvestment;
             
             // Calculate total capital invested
-            const totalCapitalInvestedCell = [...formatter.format(data.valueEndOfYear - totalInterestCell)];
+            const totalCapitalInvestedCell = data.valueEndOfYear - totalInterestCell;
 
             // Build table row
-            return createTableRow([
-                yearCell,
-                annualInvestmentCell,
-                interestCell,
-                totalInterestCell,
-                totalCapitalInvestedCell,
-            ])
+            return (
+                <tr key={data.year}>
+                    <td>{data.year}</td>
+                    <td>{formatter.format(data.valueEndOfYear)}</td>
+                    <td>{formatter.format(data.interest)}</td>
+                    <td>{formatter.format(totalInterestCell)}</td>
+                    <td>{formatter.format(totalCapitalInvestedCell)}</td>
+                </tr>
+            )
         });
 
     return (
         <div id="result">
             <table id="result-table" className="center">
                 <thead>
-                    <tr key={data.year}>
+                    <tr>
                         <th>Year</th>
                         <th>Investment Value</th>
                         <th>Interest (Year)</th>
