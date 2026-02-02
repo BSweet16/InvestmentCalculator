@@ -1,45 +1,9 @@
-import { calculateInvestmentResults } from "../../util/investment.js";
+import { formatter, calculateInvestmentResults } from "../../util/investment.js";
 
-const DEFAULT_TABLE_DATA = [
-    {
-        year: 1,
-        investmentValue: 1,
-        interestYear: 1,
-        totalInterest: 1,
-        investedCapital: 1,
-    },
-    {
-        year: 2,
-        investmentValue: 2,
-        interestYear: 2,
-        totalInterest: 2,
-        investedCapital: 2,
-    },
-    {
-        year: 3,
-        investmentValue: 3,
-        interestYear: 3,
-        totalInterest: 3,
-        investedCapital: 3,
-    },
-    {
-        year: 4,
-        investmentValue: 4,
-        interestYear: 4,
-        totalInterest: 4,
-        investedCapital: 4,
-    },
-    {
-        year: 5,
-        investmentValue: 5,
-        interestYear: 5,
-        totalInterest: 5,
-        investedCapital: 5,
-    },
-];
+const EMPTY_TABLE_DATA = [];
 
 export function ResultTable({
-    initialvalue = 0,
+    initialValue = 0,
     annualValue = 0,
     expectedValue = 0,
     durationValue = 0,
@@ -65,24 +29,32 @@ export function ResultTable({
             </tr>
         );
     }
-
+    
+    // Calculate row values and build table
+    let runningInterestPaid = 0; // Maintian a counter of interest paid so far, to avoid having to recalculate per row
     const calculatedTableData =
-        calculateInvestmentResults(
-            initialvalue,
-            annualValue,
-            expectedValue,
-            durationValue,
-        ) ?? DEFAULT_TABLE_DATA;
-    console.log(calculatedTableData);
+        calculateInvestmentResults({
+            initialInvestment: initialValue,
+            annualInvestment: annualValue,
+            expectedReturn: expectedValue,
+            duration: durationValue,
+        }) ?? EMPTY_TABLE_DATA;
     const tableRows = calculatedTableData.map((data) =>
-        createTableRow([
-            data.year,
-            data.investmentValue,
-            data.interestYear,
-            data.totalInterest,
-            data.investedCapital,
-        ]),
-    );
+        {
+            // Format data for row
+            const annualCell = data.year;
+            const annualInvestmentCell = [...formatter.format(data.annualInvestment)];
+            const interestCell = [...formatter.format(data.interest)];
+            const totalInterestCell = [...formatter.format(runningInterestPaid += data.interest)];
+            const endOfYearCell = [...formatter.format(data.valueEndOfYear)];
+            return createTableRow([
+                annualCell,
+                annualInvestmentCell,
+                interestCell,
+                totalInterestCell,
+                endOfYearCell,
+            ])
+        });
 
     return (
         <div id="result">
