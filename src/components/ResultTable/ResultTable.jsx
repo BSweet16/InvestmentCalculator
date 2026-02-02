@@ -56,34 +56,33 @@ export function ResultTable({
         cellValueFive,
     ]) {
         return (
-            <>
-                <tr>
-                    <td>{cellValueOne}</td>
-                    <td>{cellValueTwo}</td>
-                    <td>{cellValueThree}</td>
-                    <td>{cellValueFour}</td>
-                    <td>{cellValueFive}</td>
-                </tr>
-            </>
+            <tr>
+                <td>{cellValueOne}</td>
+                <td>{cellValueTwo}</td>
+                <td>{cellValueThree}</td>
+                <td>{cellValueFour}</td>
+                <td>{cellValueFive}</td>
+            </tr>
         );
     }
 
-    const calculatedTableData = calculateInvestmentResults(
+    const calculatedTableData =
+        calculateInvestmentResults(
             initialvalue,
             annualValue,
             expectedValue,
             durationValue,
         ) ?? DEFAULT_TABLE_DATA;
-    console.log(calculatedTableData)
+    console.log(calculatedTableData);
     const tableRows = calculatedTableData.map((data) =>
-                        createTableRow([
-                            data.year,
-                            data.investmentValue,
-                            data.interestYear,
-                            data.totalInterest,
-                            data.investedCapital,
-                        ]),
-                    )
+        createTableRow([
+            data.year,
+            data.investmentValue,
+            data.interestYear,
+            data.totalInterest,
+            data.investedCapital,
+        ]),
+    );
 
     return (
         <div id="result">
@@ -97,9 +96,7 @@ export function ResultTable({
                         <th>Invested Capital</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {tableRows}
-                </tbody>
+                <tbody>{tableRows}</tbody>
             </table>
         </div>
     );
