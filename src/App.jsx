@@ -19,7 +19,7 @@ function App() {
    * The main OnChange event which calls the formatter function
    * and handles claculation of the final output.
    */
-  function updateInputsOnChange(e) {
+  function handleInputsOnChange(e) {
     // Update State
     const inputName = e.target.getAttribute("name");
     switch (inputName) {
@@ -47,7 +47,7 @@ function App() {
           <Header />
 
           {/* Body Section */}
-          <UserInput onChangeListener={updateInputsOnChange} />
+          <UserInput onChangeListener={handleInputsOnChange} />
 
           {/* Result Table Section */}
           <ResultTable
