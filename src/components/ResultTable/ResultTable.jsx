@@ -42,17 +42,24 @@ export function ResultTable({
     const tableRows = calculatedTableData.map((data) =>
         {
             // Format data for row
-            const annualCell = data.year;
-            const annualInvestmentCell = [...formatter.format(data.annualInvestment)];
+            const yearCell = data.year;
+            const annualInvestmentCell = [...formatter.format(data.valueEndOfYear)];
             const interestCell = [...formatter.format(data.interest)];
-            const totalInterestCell = [...formatter.format(runningInterestPaid += data.interest)];
-            const endOfYearCell = [...formatter.format(data.valueEndOfYear)];
+            
+            // Calculate total interest earned
+            const initialInvestment = calculatedTableData[0].valueEndOfYear - calculatedTableData[0].interest - calculatedTableData[0].annualInvestment;
+            const totalInterestCell = [...formatter.format(data.valueEndOfYear - data.annualInvestment * data.year - initialInvestment)];
+            
+            // Calculate total capital invested
+            const totalCapitalInvestedCell = [...formatter.format(data.valueEndOfYear - totalInterestCell)];
+
+            // Build table row
             return createTableRow([
-                annualCell,
+                yearCell,
                 annualInvestmentCell,
                 interestCell,
                 totalInterestCell,
-                endOfYearCell,
+                totalCapitalInvestedCell,
             ])
         });
 
